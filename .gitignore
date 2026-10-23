@@ -1,0 +1,17 @@
+# File konfigurasi lokal dan rahasia
+.env
+.env.*
+!.env.example
+/config/database.php
+
+# Folder dependensi
+/vendor/
+/node_modules/
+
+# File log
+*.log
+
+# File sistem operasi
+.DS_Store
+Thumbs.db
+desktop.ini
