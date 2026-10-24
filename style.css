@@ -1,0 +1,144 @@
+ /*index*/
+* {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f6;
+            color: #26352e;
+        }
+
+        header {
+            background: #198754;
+            color: white;
+            padding: 22px 8%;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+        }
+
+        nav {
+            margin-top: 18px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 22px;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .intro {
+            margin-bottom: 25px;
+        }
+
+        .search {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #ccd8d0;
+            border-radius: 8px;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #0000000d;
+        }
+
+        .card h3 {
+            margin-top: 0;
+        }
+
+        .price {
+            color: #198754;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .stock {
+            color: #64746a;
+        }
+
+        .card input {
+            width: 75px;
+            padding: 8px;
+            margin: 10px 0;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 11px;
+            border: none;
+            border-radius: 7px;
+            background: #198754;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64746a;
+        }
+
+
+        /*riwayat*/
+        
+         .riwayat {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            margin-top: 25px;
+            overflow-x: auto;
+        }
+
+        .riwayat table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .riwayat th,
+        .riwayat td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #e5ebe7;
+        }
+
+        .riwayat th {
+            background: #e8f5ed;
+        }
+
+        .total {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .kosong {
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+        }
