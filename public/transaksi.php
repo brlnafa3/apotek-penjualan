@@ -127,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"
 
             // Memanggil Stored Procedure
             $stmt = $conn->prepare(
-                "CALL sp_proses_pembelian_multi(?)"
+                "CALL sp_proses_pembelian(?)"
             );
 
             $stmt->bind_param("s", $json);
