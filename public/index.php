@@ -20,22 +20,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($aksi === "tambah") {
 
         $nama = trim($_POST["nama_obat"] ?? "");
+        $satuan = trim($_POST["satuan"] ?? "");
         $harga = filter_var($_POST["harga"] ?? null, FILTER_VALIDATE_FLOAT);
         $stok = filter_var($_POST["stok"] ?? null, FILTER_VALIDATE_INT);
 
-        if ($nama === "" || $harga === false || $harga <= 0 ||
-            $stok === false || $stok < 0) {
+        if ($nama === "" || $satuan === "" || $harga === false || $harga <= 0 || $stok === false || $stok < 0) {
 
             header("Location: index.php?pesan=input_salah");
             exit;
         }
 
         $stmt = $conn->prepare(
-            "INSERT INTO obat (nama_obat, harga, stok)
-             VALUES (?, ?, ?)"
+            "INSERT INTO obat (nama_obat, satuan, harga, stok)
+             VALUES (?, ?, ?, ?)"
         );
 
-        $stmt->bind_param("sdi", $nama, $harga, $stok);
+        $stmt->bind_param("sdi", $nama, $satuan, $harga, $stok);
 
         if ($stmt->execute()) {
             $stmt->close();
@@ -95,7 +95,7 @@ $pesan = $_GET["pesan"] ?? "";
 
 // Mengambil daftar obat dari database
 $result = $conn->query(
-    "SELECT id_obat, nama_obat, harga, stok
+    "SELECT id_obat, nama_obat, satuan, harga, stok
      FROM obat
      ORDER BY nama_obat ASC"
 );
@@ -173,6 +173,11 @@ $result = $conn->query(
                    placeholder="Contoh: Paracetamol 500 mg"
                    maxlength="255" required>
 
+            <label for="satuan">Satuan</label>
+            <input type="text" id="satuan" name="satuan"
+                   placeholder="Contoh: strip, botol"
+                   maxlength="20" required>
+
             <label for="harga">Harga (Rp)</label>
             <input type="number" id="harga" name="harga"
                    min="0.01" step="0.01" required>
@@ -203,6 +208,10 @@ $result = $conn->query(
                 <h3 class="nama-obat">
                     <?= htmlspecialchars($obat["nama_obat"]) ?>
                 </h3>
+
+                <p style="color: #718096; font-size: 13px; margin-top: -10px; margin-bottom: 15px;">
+                    Satuan: <?= htmlspecialchars($obat["satuan"]) ?>
+                </p>
 
                 <p class="price">
                     Rp <?= number_format(

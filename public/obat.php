@@ -31,17 +31,18 @@ $pesan = "";
 if (isset($_POST["tambah"])) {
 
     $nama = trim($_POST["nama_obat"] ?? "");
+    $satuan = trim($_POST["satuan"] ?? "");
     $harga = (float) ($_POST["harga"] ?? 0);
     $stok = (int) ($_POST["stok"] ?? 0);
 
-    if ($nama !== "" && $harga >= 0 && $stok >= 0) {
+    if ($nama !== "" && $satuan !== "" && $harga >= 0 && $stok >= 0) {
 
         $stmt = $conn->prepare(
-            "INSERT INTO obat (nama_obat, harga, stok)
-             VALUES (?, ?, ?)"
+            "INSERT INTO obat (nama_obat, satuan, harga, stok)
+             VALUES (?, ?, ?, ?)"
         );
 
-        $stmt->bind_param("sdi", $nama, $harga, $stok);
+        $stmt->bind_param("ssdi", $nama, $satuan, $harga, $stok);
         $stmt->execute();
         $stmt->close();
 
@@ -58,18 +59,19 @@ if (isset($_POST["edit"])) {
 
     $id = (int) ($_POST["id_obat"] ?? 0);
     $nama = trim($_POST["nama_obat"] ?? "");
+    $satuan = trim($_POST["satuan"] ?? "");
     $harga = (float) ($_POST["harga"] ?? 0);
     $stok = (int) ($_POST["stok"] ?? 0);
 
-    if ($id > 0 && $nama !== "" && $harga >= 0 && $stok >= 0) {
+    if ($id > 0 && $nama !== "" && $satuan !== "" && $harga >= 0 && $stok >= 0) {
 
         $stmt = $conn->prepare(
             "UPDATE obat
-             SET nama_obat = ?, harga = ?, stok = ?
+             SET nama_obat = ?, satuan = ?, harga = ?, stok = ?
              WHERE id_obat = ?"
         );
 
-        $stmt->bind_param("sdii", $nama, $harga, $stok, $id);
+        $stmt->bind_param("sdii", $nama, $satuan, $harga, $stok, $id);
         $stmt->execute();
         $stmt->close();
 
@@ -118,7 +120,7 @@ if (isset($_GET["pesan"])) {
 
 // AMBIL DATA OBAT
 $result = $conn->query(
-    "SELECT id_obat, nama_obat, harga, stok
+    "SELECT id_obat, nama_obat, satuan, harga, stok
      FROM obat
      ORDER BY id_obat DESC"
 );
@@ -131,7 +133,7 @@ if (isset($_GET["edit"])) {
     $idEdit = (int) $_GET["edit"];
 
     $stmt = $conn->prepare(
-        "SELECT id_obat, nama_obat, harga, stok
+        "SELECT id_obat, nama_obat, satuan, harga, stok
          FROM obat
          WHERE id_obat = ?"
     );
@@ -203,6 +205,15 @@ function e($nilai) {
                 required
             >
 
+            <label>Satuan</label>
+            <input
+                type="text"
+                name="satuan"
+                placeholder="Masukkan satuan (Misal: strip, botol)"
+                value="<?= e($editObat["satuan"] ?? "") ?>"
+                required
+            >
+
             <label>Harga Obat</label>
             <input
                 type="number"
@@ -255,6 +266,7 @@ function e($nilai) {
                 <tr>
                     <th>ID</th>
                     <th>Nama Obat</th>
+                    <th>Satuan</th>
                     <th>Harga</th>
                     <th>Stok</th>
                     <th>Aksi</th>
@@ -271,6 +283,8 @@ function e($nilai) {
                             <td><?= e($row["id_obat"]) ?></td>
 
                             <td><?= e($row["nama_obat"]) ?></td>
+
+                            <td><?= e($row["satuan"]) ?></td>
 
                             <td><?= rupiah($row["harga"]) ?></td>
 
