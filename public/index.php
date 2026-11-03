@@ -194,8 +194,7 @@ $result = $conn->query(
 
     </section>
 
-
-    <!-
+    
 <!-- DAFTAR OBAT -->
 <section class="products" id="daftar-obat">
 
