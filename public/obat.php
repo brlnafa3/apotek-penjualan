@@ -71,7 +71,7 @@ if (isset($_POST["edit"])) {
              WHERE id_obat = ?"
         );
 
-        $stmt->bind_param("sdii", $nama, $satuan, $harga, $stok, $id);
+        $stmt->bind_param("ssdii", $nama, $satuan, $harga, $stok, $id);
         $stmt->execute();
         $stmt->close();
 
