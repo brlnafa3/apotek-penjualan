@@ -9,46 +9,11 @@ if ($conn->connect_error) {
 $conn->set_charset("utf8mb4");
 $pesan = "";
 
-// Proses tambah atau hapus obat
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-    $aksi = isset($_POST["id_obat"])
-        ? "hapus"
-        : ($_POST["aksi"] ?? "");
-
-    // PROSES TAMBAH OBAT
-    if ($aksi === "tambah") {
-
-        $nama = trim($_POST["nama_obat"] ?? "");
-        $satuan = trim($_POST["satuan"] ?? "");
-        $harga = filter_var($_POST["harga"] ?? null, FILTER_VALIDATE_FLOAT);
-        $stok = filter_var($_POST["stok"] ?? null, FILTER_VALIDATE_INT);
-
-        if ($nama === "" || $satuan === "" || $harga === false || $harga <= 0 || $stok === false || $stok < 0) {
-
-            header("Location: index.php?pesan=input_salah");
-            exit;
-        }
-
-        $stmt = $conn->prepare(
-            "INSERT INTO obat (nama_obat, satuan, harga, stok)
-             VALUES (?, ?, ?, ?)"
-        );
-
-        $stmt->bind_param("sdi", $nama, $satuan, $harga, $stok);
-
-        if ($stmt->execute()) {
-            $stmt->close();
-            header("Location: index.php?pesan=tambah");
-            exit;
-        }
-
-        $stmt->close();
-        header("Location: index.php?pesan=gagal");
-        exit;
-    }
-
     // PROSES HAPUS OBAT
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+        $aksi = isset($_POST["id_obat"]) ? "hapus" : ($_POST["aksi"] ?? "");
+
     if ($aksi === "hapus") {
 
         $id = filter_var($_POST["id_obat"] ?? null, FILTER_VALIDATE_INT);
@@ -93,12 +58,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 // Pesan hasil tindakan
 $pesan = $_GET["pesan"] ?? "";
 
-// Mengambil daftar obat dari database
-$result = $conn->query(
-    "SELECT id_obat, nama_obat, satuan, harga, stok
-     FROM obat
-     ORDER BY nama_obat ASC"
-);
+// Menangkap kata kunci pencarian jika ada
+$keyword = $_GET['cari'] ?? '';
+
+if ($keyword !== '') {
+    // Jika ada pencarian, gunakan klausa LIKE
+    $stmt = $conn->prepare(
+        "SELECT id_obat, nama_obat, satuan, harga, stok
+         FROM obat
+         WHERE nama_obat LIKE ?
+         ORDER BY nama_obat ASC"
+    );
+    $like_keyword = "%" . $keyword . "%";
+    $stmt->bind_param("s", $like_keyword);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} else {
+    // Jika tidak ada pencarian, tampilkan semua
+    $result = $conn->query(
+        "SELECT id_obat, nama_obat, satuan, harga, stok
+         FROM obat
+         ORDER BY nama_obat ASC"
+    );
+}
 ?>
 
 <!DOCTYPE html>
@@ -159,42 +141,24 @@ $result = $conn->query(
     <?php endif; ?>
 
 
-    <!-- FORM TAMBAH OBAT -->
-    <section class="form-tambah">
+ <!-- FORM PENCARIAN OBAT -->
+    <form method="GET" action="index.php" style="display: flex; gap: 10px; margin-bottom: 24px;">
+        <input 
+            type="text" 
+            name="cari" 
+            class="search" 
+            placeholder="Cari nama obat..." 
+            value="<?= htmlspecialchars($keyword) ?>" 
+            style="margin-bottom: 0;"
+        >
+        <button type="submit" style="white-space: nowrap;">🔍 Cari</button>
+        
+        <?php if ($keyword !== ''): ?>
+            <a href="index.php" style="padding: 10px 15px; color: #c45d66; background: #fff0f0; border-radius: 10px; text-decoration: none; font-weight: bold; display: flex; align-items: center;">Reset</a>
+        <?php endif; ?>
+    </form>
 
-        <h2>+ Tambah Obat Baru</h2>
 
-        <form method="POST" action="index.php" class="form-obat">
-
-            <input type="hidden" name="aksi" value="tambah">
-
-            <label for="nama_obat">Nama obat</label>
-            <input type="text" id="nama_obat" name="nama_obat"
-                   placeholder="Contoh: Paracetamol 500 mg"
-                   maxlength="255" required>
-
-            <label for="satuan">Satuan</label>
-            <input type="text" id="satuan" name="satuan"
-                   placeholder="Contoh: strip, botol"
-                   maxlength="20" required>
-
-            <label for="harga">Harga (Rp)</label>
-            <input type="number" id="harga" name="harga"
-                   min="0.01" step="0.01" required>
-
-            <label for="stok">Stok</label>
-            <input type="number" id="stok" name="stok"
-                   min="0" step="1" required>
-
-            <button type="submit" class="btn-tambah">
-                + Simpan Obat
-            </button>
-
-        </form>
-
-    </section>
-
-    
 <!-- DAFTAR OBAT -->
 <section class="products" id="daftar-obat">
 
@@ -287,16 +251,13 @@ $result = $conn->query(
 
 
 <!-- FORM CHECKOUT -->
-</section>
-
-<form action="transaksi.php" method="POST" id="form-pembelian">
+<form action="transaksi.php" method="POST" id="form-pembelian" style="margin-top: 45px; text-align: right;">
 
     <input type="hidden" name="aksi" value="checkout">
 
-   <button type="submit" name="aksi" value="checkout"
-        class="btn-checkout">
-    Lanjut ke Pembayaran
-</button>
+    <button type="submit" name="aksi" value="checkout" class="btn-checkout" style="padding: 12px 28px; font-size: 16px; box-shadow: 0 4px 12px rgba(120, 171, 224, 0.3);">
+        Lanjut ke Pembayaran ➔
+    </button>
 
 </form>
 
