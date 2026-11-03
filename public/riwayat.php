@@ -41,8 +41,6 @@ $sql = "
 
 $result = $conn->query($sql);
 
-$result = $conn->query($sql);
-
 ?>
 <body>
 
