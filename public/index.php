@@ -141,20 +141,22 @@ if ($keyword !== '') {
     <?php endif; ?>
 
 
- <!-- FORM PENCARIAN OBAT -->
-    <form method="GET" action="index.php" style="display: flex; gap: 10px; margin-bottom: 24px;">
-        <input 
-            type="text" 
-            name="cari" 
-            class="search" 
-            placeholder="Cari nama obat..." 
-            value="<?= htmlspecialchars($keyword) ?>">
-        <button type="submit">🔍 Cari</button>
-        
-        <?php if ($keyword !== ''): ?>
-            <a href="index.php" class="btn-reset">Reset</a>
-        <?php endif; ?>
-    </form>
+<!-- FORM PENCARIAN OBAT -->
+<form method="GET" action="index.php" style="display: flex; gap: 10px; margin-bottom: 24px; align-items: stretch;">
+    <input 
+        type="text" 
+        name="cari" 
+        class="search" 
+        placeholder="Cari nama obat..." 
+        value="<?= htmlspecialchars($keyword) ?>" 
+        style="margin-bottom: 0; flex: 1;"
+    >
+    <button type="submit" style="padding: 0 25px; white-space: nowrap; height: auto;">🔍 Cari</button>
+    
+    <?php if ($keyword !== ''): ?>
+        <a href="index.php" style="padding: 0 20px; color: #c45d66; background: #fff0f0; border-radius: 10px; text-decoration: none; font-weight: bold; display: flex; align-items: center;">Reset</a>
+    <?php endif; ?>
+</form>
 
 
 <!-- DAFTAR OBAT -->
@@ -234,11 +236,11 @@ if ($keyword !== '') {
 
 
 <!-- FORM CHECKOUT -->
-<form action="transaksi.php" method="POST" id="form-pembelian" class="checkout-container">
+<form action="transaksi.php" method="POST" id="form-pembelian" style="margin-top: 45px; text-align: right;">
 
     <input type="hidden" name="aksi" value="checkout">
 
-    <button type="submit" name="aksi" value="checkout" class="btn-checkout-large">
+    <button type="submit" name="aksi" value="checkout" style="padding: 12px 28px; font-size: 16px; background: linear-gradient(135deg, #76afe5, #4e8bc9); color: white; border-radius: 12px; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(120, 171, 224, 0.3);">
         Lanjut ke Pembayaran ➔
     </button>
 
