@@ -148,13 +148,11 @@ if ($keyword !== '') {
             name="cari" 
             class="search" 
             placeholder="Cari nama obat..." 
-            value="<?= htmlspecialchars($keyword) ?>" 
-            style="margin-bottom: 0;"
-        >
-        <button type="submit" style="white-space: nowrap;">🔍 Cari</button>
+            value="<?= htmlspecialchars($keyword) ?>">
+        <button type="submit">🔍 Cari</button>
         
         <?php if ($keyword !== ''): ?>
-            <a href="index.php" style="padding: 10px 15px; color: #c45d66; background: #fff0f0; border-radius: 10px; text-decoration: none; font-weight: bold; display: flex; align-items: center;">Reset</a>
+            <a href="index.php" class="btn-reset">Reset</a>
         <?php endif; ?>
     </form>
 
@@ -222,21 +220,6 @@ if ($keyword !== '') {
 
                 </div>
 
-                <!-- Tombol hapus -->
-                <form method="POST" action="index.php"
-                      onsubmit="return confirm('Yakin ingin menghapus obat ini?')">
-
-                    <button
-                        type="submit"
-                        name="id_obat"
-                        value="<?= (int)$obat["id_obat"] ?>"
-                        class="btn-hapus"
-                    >
-                        🗑 Hapus Obat
-                    </button>
-
-                </form>
-
             </article>
 
         <?php endwhile; ?>
@@ -251,11 +234,11 @@ if ($keyword !== '') {
 
 
 <!-- FORM CHECKOUT -->
-<form action="transaksi.php" method="POST" id="form-pembelian" style="margin-top: 45px; text-align: right;">
+<form action="transaksi.php" method="POST" id="form-pembelian" class="checkout-container">
 
     <input type="hidden" name="aksi" value="checkout">
 
-    <button type="submit" name="aksi" value="checkout" class="btn-checkout" style="padding: 12px 28px; font-size: 16px; box-shadow: 0 4px 12px rgba(120, 171, 224, 0.3);">
+    <button type="submit" name="aksi" value="checkout" class="btn-checkout-large">
         Lanjut ke Pembayaran ➔
     </button>
 
